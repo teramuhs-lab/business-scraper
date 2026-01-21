@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Business } from '@/types';
 
 interface BusinessCardProps {
@@ -7,6 +8,17 @@ interface BusinessCardProps {
 }
 
 export default function BusinessCard({ business }: BusinessCardProps) {
+  const [showEmail, setShowEmail] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = () => {
+    if (business.generatedEmail) {
+      navigator.clipboard.writeText(business.generatedEmail);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
       <div className="p-6">
@@ -76,6 +88,70 @@ export default function BusinessCard({ business }: BusinessCardProps) {
             </div>
           )}
         </div>
+
+        {/* AI Insights */}
+        {business.businessInsights && (
+          <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+            <div className="text-xs font-semibold text-purple-600 dark:text-purple-400 mb-2 flex items-center gap-1">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V5h2v4z"/>
+              </svg>
+              AI Insights
+            </div>
+            {business.businessInsights.services && (
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">
+                <span className="font-medium">Services:</span> {business.businessInsights.services}
+              </p>
+            )}
+            {business.businessInsights.automationOpportunities && business.businessInsights.automationOpportunities.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {business.businessInsights.automationOpportunities.slice(0, 3).map((opp, i) => (
+                  <span key={i} className="px-2 py-0.5 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded">
+                    {opp}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Generated Email */}
+        {business.generatedEmail && (
+          <div className="mt-4">
+            <button
+              onClick={() => setShowEmail(!showEmail)}
+              className="w-full py-2 px-4 text-sm font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors flex items-center justify-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              {showEmail ? 'Hide' : 'View'} Generated Email
+            </button>
+
+            {showEmail && (
+              <div className="mt-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-lg relative">
+                <button
+                  onClick={copyEmail}
+                  className="absolute top-2 right-2 p-1.5 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 bg-white dark:bg-slate-800 rounded shadow-sm"
+                  title="Copy email"
+                >
+                  {copied ? (
+                    <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  )}
+                </button>
+                <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap pr-8">
+                  {business.generatedEmail}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="flex gap-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
           {business.website && (

@@ -1,3 +1,9 @@
+export interface BusinessInsights {
+  services?: string;
+  targetCustomers?: string;
+  automationOpportunities?: string[];
+}
+
 export interface Business {
   title: string | null;
   summary: string | null;
@@ -13,6 +19,8 @@ export interface Business {
   placeId: string | null;
   latitude: number | null;
   longitude: number | null;
+  businessInsights: BusinessInsights | null;
+  generatedEmail: string | null;
 }
 
 export interface SearchResponse {
