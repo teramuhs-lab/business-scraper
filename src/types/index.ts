@@ -1,7 +1,10 @@
 export interface BusinessInsights {
   services?: string;
   targetCustomers?: string;
+  businessSize?: string;
   automationOpportunities?: string[];
+  painPoints?: string[];
+  uniqueSellingPoint?: string;
 }
 
 export interface Business {
@@ -19,8 +22,20 @@ export interface Business {
   placeId: string | null;
   latitude: number | null;
   longitude: number | null;
+  hasWebsite: boolean;
+  contentQuality: 'none' | 'low' | 'medium' | 'high';
   businessInsights: BusinessInsights | null;
   generatedEmail: string | null;
+  emailQuality: 'excellent' | 'good' | 'needs_review' | 'template' | 'unknown';
+  processingPath: 'ai_full' | 'template' | 'unknown';
+}
+
+export interface ProcessingStats {
+  total: number;
+  aiProcessed: number;
+  templateUsed: number;
+  excellentEmails: number;
+  needsReview: number;
 }
 
 export interface SearchResponse {
@@ -28,6 +43,7 @@ export interface SearchResponse {
   data: {
     businesses: Business[];
     total: number;
+    stats?: ProcessingStats;
   };
   processedAt: string;
 }

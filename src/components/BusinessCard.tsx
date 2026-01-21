@@ -92,15 +92,27 @@ export default function BusinessCard({ business }: BusinessCardProps) {
         {/* AI Insights */}
         {business.businessInsights && (
           <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
-            <div className="text-xs font-semibold text-purple-600 dark:text-purple-400 mb-2 flex items-center gap-1">
-              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V5h2v4z"/>
-              </svg>
-              AI Insights
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-xs font-semibold text-purple-600 dark:text-purple-400 flex items-center gap-1">
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V5h2v4z"/>
+                </svg>
+                AI Insights
+              </div>
+              {business.processingPath === 'template' && (
+                <span className="text-xs px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 rounded">
+                  Template
+                </span>
+              )}
             </div>
             {business.businessInsights.services && (
               <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">
                 <span className="font-medium">Services:</span> {business.businessInsights.services}
+              </p>
+            )}
+            {business.businessInsights.painPoints && business.businessInsights.painPoints.length > 0 && (
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">
+                <span className="font-medium">Pain Points:</span> {business.businessInsights.painPoints.join(', ')}
               </p>
             )}
             {business.businessInsights.automationOpportunities && business.businessInsights.automationOpportunities.length > 0 && (
@@ -126,6 +138,12 @@ export default function BusinessCard({ business }: BusinessCardProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
               {showEmail ? 'Hide' : 'View'} Generated Email
+              {business.emailQuality === 'excellent' && (
+                <span className="ml-1 px-1.5 py-0.5 text-xs bg-green-500 text-white rounded">★</span>
+              )}
+              {business.emailQuality === 'needs_review' && (
+                <span className="ml-1 px-1.5 py-0.5 text-xs bg-yellow-500 text-white rounded">!</span>
+              )}
             </button>
 
             {showEmail && (

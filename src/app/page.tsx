@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import SearchForm from '@/components/SearchForm';
 import ResultsList from '@/components/ResultsList';
-import { SearchFormData, SearchResponse, Business } from '@/types';
+import { SearchFormData, SearchResponse, Business, ProcessingStats } from '@/types';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,6 +12,7 @@ export default function Home() {
     businesses: Business[];
     total: number;
     processedAt: string;
+    stats?: ProcessingStats;
   } | null>(null);
 
   const handleSearch = async (formData: SearchFormData) => {
@@ -38,6 +39,7 @@ export default function Home() {
         businesses: data.data.businesses,
         total: data.data.total,
         processedAt: data.processedAt,
+        stats: data.data.stats,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -90,6 +92,24 @@ export default function Home() {
 
         {results && !isLoading && (
           <div className="mt-12">
+            {results.stats && (
+              <div className="mb-6 flex flex-wrap gap-3 justify-center">
+                <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm">
+                  {results.stats.total} businesses
+                </span>
+                <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm">
+                  {results.stats.aiProcessed} AI-analyzed
+                </span>
+                {results.stats.templateUsed > 0 && (
+                  <span className="px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-full text-sm">
+                    {results.stats.templateUsed} templates
+                  </span>
+                )}
+                <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm">
+                  {results.stats.excellentEmails} excellent emails
+                </span>
+              </div>
+            )}
             <ResultsList
               businesses={results.businesses}
               total={results.total}
