@@ -2,6 +2,7 @@ export interface Business {
   title: string | null;
   summary: string | null;
   website: string | null;
+  email: string | null;
   phone: string | null;
   address: string | null;
   city: string | null;

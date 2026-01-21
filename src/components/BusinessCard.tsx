@@ -64,6 +64,17 @@ export default function BusinessCard({ business }: BusinessCardProps) {
               </a>
             </div>
           )}
+
+          {business.email && (
+            <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <a href={`mailto:${business.email}`} className="hover:text-blue-600 transition-colors">
+                {business.email}
+              </a>
+            </div>
+          )}
         </div>
 
         <div className="flex gap-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
