@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const maxDuration = 60; // Allow up to 60 seconds for Apify scraping
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -46,7 +48,11 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+
+    // n8n returns an array, extract the first item
+    const result = Array.isArray(data) ? data[0] : data;
+
+    return NextResponse.json(result);
 
   } catch (error) {
     console.error('API route error:', error);
